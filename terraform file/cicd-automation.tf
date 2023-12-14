@@ -121,6 +121,15 @@ resource "aws_security_group" "cd_instance_sg" {
     cidr_blocks = [var.https_cidr_block]
   }
 
+  # Additional ingress rule for port 3000
+  ingress {
+    description = "Custom port for your application"
+    from_port   = 3000
+    to_port     = 3000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Adjust CIDR block as per your requirements
+  }
+
   egress {
     from_port       = 0
     to_port         = 0
@@ -132,7 +141,7 @@ resource "aws_security_group" "cd_instance_sg" {
 resource "aws_instance" "cd_instance" {
   ami                    = var.ami_id
   instance_type          = var.instance_type_cd
-  key_name               = "new-tier"
+  key_name               = "your_key"
   vpc_security_group_ids = [aws_security_group.cd_instance_sg.id]
   subnet_id              = aws_subnet.rc_pub.id
 
@@ -140,59 +149,6 @@ resource "aws_instance" "cd_instance" {
     #!/bin/bash
     sudo apt-get update -y
     sudo apt-get install -y docker.io
-    sudo curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-    sudo install minikube-linux-amd64 /usr/local/bin/minikube
-    sudo snap install kubectl --classic
-    sudo usermod -aG docker $USER && newgrp docker
-    minikube start
-
-    cat <<'EOT' > deployment.yaml
-    apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-    name: reddit-clone-deployment
-    labels:
-        app: reddit-clone
-    spec:
-    replicas: 2
-    selector:
-        matchLabels:
-         app: reddit-clone
-    template:
-        metadata:
-            labels:
-                app: reddit-clone
-        spec:
-            containers:
-            - name: reddit-clone
-              image: ${var.docker_username}/reddit_clone
-              ports:
-                - containerPort: 3000
-    EOT
-
-    kubectl apply -f deployment.yaml
-
-    cat <<'EOT' > service.yaml
-    apiVersion: v1
-    kind: Service
-    metadata:
-        name: reddit-service
-        labels:
-            app: reddit-clone
-    spec:
-        selector:
-            app: reddit-clone
-        type: NodePort
-        ports:
-        - port: 3000
-          targetPort: 3000
-          nodePort: 31000
-    EOT
-
-    kubectl apply -f service.yaml
-
-    kubectl expose deployment reddit-clone-deployment --type=NodePort
-    kubectl port-forward svc/reddit-clone-deployment 3000:3000 --address 0.0.0.0 &
   EOF
 
   tags = {
