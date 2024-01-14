@@ -1,0 +1,27 @@
+I am a data analyst who has worked with tools such as PYTHON, EXCEL, & SQL, to extract insight from data & used Power BI to visualize my findings in order to solve a business problem or find operational inefficiency. Check out MY PROJECT PORTFOLIO.
+
+
+
+
+1.Github - Code remote rpository
+2. Docker - Conatinerization
+3. AWS EC2- Hosting the application
+4. Jenkins -  Creating pipeline for code integration from github to 
+
+
+Create AWS EC2 instance t2.micro
+install jenkins
+install node js
+pull todo list app from github
+install docker and create docker image and push it in the dockerhub
+sudo usermod -aG docker $USER
+
+
+
+workspace available at /var/lib/jenkins/workspace
+
+
+Webhooks allow external services to be notified when certain events happen. When the specified events happen, we’ll send a POST request to each of the URLs you provide. Learn more in our 
+
+GitHub hook trigger for GITScm polling
+?
