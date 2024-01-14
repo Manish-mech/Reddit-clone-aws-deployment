@@ -31,7 +31,7 @@ variable "instance_type_cd" {
 }
 
 variable "ssh_cidr_block" {
-  description = "CIDR block for SSH access"
+  description = "CIDR block for Secure Shell access"
   default     = "0.0.0.0/0"
 }
 
